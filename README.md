@@ -2,11 +2,11 @@
 
 # Development
 
-To install dependencies run `npm i` or `npm install`. After that run `npm run dev`. All changes will be reload automatically.
+To install dependencies run `npm i` or `npm install`. After that run `npm run dev`. All changes will be reloaded automatically.
 
 # Testing
 
-To run test execute `npm run test`
+To run tests execute `npm run test`
 
 # Swagger API Documentation
 
