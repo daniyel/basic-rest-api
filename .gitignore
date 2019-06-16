@@ -58,5 +58,4 @@ test/**/*.js.map
 public
 
 # SQLite folder
-
-./data/*
+data

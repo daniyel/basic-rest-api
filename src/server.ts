@@ -4,6 +4,8 @@ import bodyParser from 'body-parser';
 import compression from 'compression';
 import '@tsed/swagger';
 
+import ormconfig from '../ormconfig.json';
+
 @ServerSettings({
     rootDir: Path.resolve(__dirname),
     acceptMimes: ['application/json'],
@@ -11,6 +13,14 @@ import '@tsed/swagger';
     mount: {
         '/api': '${rootDir}/controllers/**/*.ts'
     },
+    componentsScan: [
+        '${rootDir}/middlewares/**/*.ts',
+        '${rootDir}/services/**/*.ts',
+        '${rootDir}/converters/**/*.ts'
+    ],
+    typeorm: [
+        ormconfig
+    ],
     swagger: [
         {
           path: '/api-docs'
@@ -40,12 +50,9 @@ export class Server extends ServerLoader {
         console.log('Server started...');
     }
 
+    /* istanbul ignore next */
     public $onServerInitError(err) {
-        console.error(err);
-    }
-
-    public close() {
-        this.httpServer.close();
+        console.error(`Server error: ${err.message}\nStack: ${err.stack}`);
     }
 }
 

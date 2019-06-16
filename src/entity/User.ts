@@ -1,9 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn } from 'typeorm';
-import { Property, Minimum, JsonProperty, Email, Format, Required } from '@tsed/common';
+import { Entity, PrimaryGeneratedColumn, Column, BaseEntity, CreateDateColumn, Unique } from 'typeorm';
+import { Property, JsonProperty, Email, Format, Required } from '@tsed/common';
 import { Schema } from '@tsed/swagger';
 
 @Entity()
 @Schema({title: 'User'})
+@Unique(['email'])
 export class User extends BaseEntity {
 
     @Property()

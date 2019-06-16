@@ -2,8 +2,8 @@ import { Controller, Get, Post, Delete, Put, BodyParams, Required, PathParams, S
 import { User } from '../entity/User';
 import { NotFound, BadRequest, InternalServerError } from 'ts-httpexceptions';
 import { UserService } from '../services/UserService';
-import { Produces } from '@tsed/swagger';
-import { DeleteResult } from 'typeorm';
+import { Produces, Returns } from '@tsed/swagger';
+import { ResponseError } from '../models/ResponseError';
 
 @Controller('/users')
 export class UserCtrl {
@@ -15,6 +15,8 @@ export class UserCtrl {
     @Get('/:id')
     @ContentType('application/json')
     @Produces('application/json')
+    @Returns(400, { description: 'Bad Request', type: ResponseError })
+    @Returns(404, { description: 'Not Found', type: ResponseError })
     async read(
         @PathParams('id') id: number
     ): Promise<User> {
@@ -41,6 +43,7 @@ export class UserCtrl {
     @Post('')
     @ContentType('application/json')
     @Produces('application/json')
+    @Returns(500, { description: 'Internal Server Error', type: ResponseError })
     async create(
         @Required() @BodyParams() user: User
     ): Promise<User> {
@@ -55,6 +58,8 @@ export class UserCtrl {
     @Put('/:id')
     @ContentType('application/json')
     @Produces('application/json')
+    @Returns(400, { description: 'Bad Request', type: ResponseError })
+    @Returns(404, { description: 'Not Found', type: ResponseError })
     async update(
         @PathParams('id') id: number,
         @Required() @BodyParams() user: User
@@ -82,18 +87,28 @@ export class UserCtrl {
     @Delete('/:id')
     @Status(204)
     @ContentType('application/json')
+    @Returns(404, { description: 'Not Found', type: ResponseError })
+    @Returns(500, { description: 'Internal Server Error', type: ResponseError })
     async delete(
         @PathParams('id') id: number
-    ): Promise<DeleteResult> {
+    ): Promise<any> {
+
+        let result;
 
         if (isNaN(+id)) {
             throw new BadRequest('id not a number');
         }
 
         try {
-            return await this.userService.delete(id);
+            result = await this.userService.delete(id);
         } catch (err) {
             throw new InternalServerError(err.message);
         }
+
+        if (!result) {
+            throw new NotFound(`User with id ${id} not found`);
+        }
+
+        return result;
     }
 }

@@ -20,6 +20,7 @@
         "trailing-comma": [true, {"multiline": "never", "singleline": "never"}],
         "no-trailing-whitespace": true,
         "no-unused-expression": true,
+        // "no-unused-variable": true,
         "no-var-keyword": false,
         "one-line": [true,
             "check-open-brace",
